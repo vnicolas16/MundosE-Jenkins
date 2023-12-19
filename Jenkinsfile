@@ -6,6 +6,29 @@ pipeline {
         IMAGE = 'prueba-node'
     }
     stages {
+
+        stage('init') {
+            agent {
+                docker {
+                    image 'node:alpine'
+                    arg '-u root:root'
+                }
+            }
+            steps {
+               sh 'npm install'
+            }
+        } 
+        stage('test') {
+            agent {
+                docker {
+                    image 'node:alpine'
+                    arg '-u root:root'
+                }
+            }
+            steps {
+               sh 'npm run test'
+            }
+        }                 
         stage('docker build') {
             steps {
                sh '''
