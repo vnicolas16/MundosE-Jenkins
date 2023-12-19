@@ -62,7 +62,7 @@ pipeline {
         }
         stage('Deploy to AWS') {
             steps {
-                ssh (['aws-ssh']){
+                sshagent (['aws-ssh']){
                     sh 'scp -o StrictHostKeyChecking=no docker-compose.yml $SERVER:/home/ec2-user'
                     sh 'ssh $SERVER ls -lrt '
                 }
