@@ -23,14 +23,6 @@ USER jenkins
 
 RUN jenkins-plugin-cli \
     --plugins \
-    "blueocean docker-workflow" \
-    pipeline-build-step \
-    pipeline-github-lib \
-    pipeline-rest-api \
-    pipeline-stage-view \
-    timestamper \
-    file-operations \
-    branch-api \
     workflow-support \
     pam-auth \
     sshd \
