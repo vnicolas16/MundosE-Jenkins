@@ -4,6 +4,7 @@ pipeline {
         DOCKER_HUB_LOGIN = credentials('docker')
         REGISTRY = "roxsross12"
         IMAGE = 'prueba-node'
+        SERVER = "ec2-user@54.81.17.164"
     }
     stages {
 
@@ -58,6 +59,14 @@ pipeline {
 
                 '''
             }
-        }        
+        }
+        stage('Deploy to AWS') {
+            steps {
+                ssh (['aws-ssh']){
+                    sh 'scp -o StrictHostKeyChecking=no docker-compose.yml $SERVER:/home/ec2-user'
+                    sh 'ssh $SERVER ls -lrt '
+                }
+            }
+        }          
     }
 }
