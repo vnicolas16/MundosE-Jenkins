@@ -3,19 +3,25 @@ pipeline {
     environment{
         DOCKER_HUB_LOGIN = credentials('docker')
         REGISTRY = "roxsross12"
+        IMAGE = 'prueba-node'
     }
     stages {
         stage('docker build') {
             steps {
-               sh 'docker build -t prueba-node:v1 .'
+               sh '''
+                VERSION=$(jq --raw-output .version package.json)
+                echo $VERSION >version.txt
+                docker build -t $IMAGE:$(cat version.txt) .
+               ''' 
+
             }
         }
         stage('Deploy to hub') {
             steps {
                 sh '''
                 docker login --username=$DOCKER_HUB_LOGIN_USR --password=$DOCKER_HUB_LOGIN_PSW
-                docker tag prueba-node:v1 $REGISTRY/prueba-node:v1
-                docker push $REGISTRY/prueba-node:v1
+                docker tag $IMAGE:$(cat version.txt) $REGISTRY/$IMAGE:$(cat version.txt)
+                docker push $REGISTRY/$IMAGE:$(cat version.txt)
                 '''
             }
         }
